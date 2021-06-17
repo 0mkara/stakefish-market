@@ -7,7 +7,8 @@ import {
   useFlexLayout,
   useResizeColumns,
   useRowSelect,
-  TableOptions
+  TableOptions,
+  CellProps
 } from 'react-table';
 import { IExchange } from '../types';
 import './style.css';
@@ -28,11 +29,17 @@ export interface TableProperties<T extends Record<string, unknown>> extends Tabl
   exchanges: Array<IExchange>;
 }
 
+// interface CellProps {
+//   cell: {
+//     value: string;
+//   };
+// }
+
 export function TableView({ exchanges }: IProps): ReactElement {
   const columns = React.useMemo(
   () => [
   {
-    Header: 'Exchanges',
+    Header: 'List of Cryptocurrency Exchanges',
     columns: [
       {
         Header: 'Name',
@@ -49,6 +56,11 @@ export function TableView({ exchanges }: IProps): ReactElement {
       {
         Header: 'Image',
         accessor: 'image',
+        Cell: ({cell: { value }}: CellProps<IExchange>) => (
+          <div>
+            <img src={value} alt="" />
+          </div>
+        )
       },
       {
         Header: 'Rank',
@@ -65,6 +77,7 @@ export function TableView({ exchanges }: IProps): ReactElement {
     ...hooks
   )
   const { getTableProps, headerGroups, getTableBodyProps, prepareRow, rows } = instance
+  
   return (
     <table {...getTableProps()}>
       <thead>
