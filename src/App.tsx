@@ -1,24 +1,23 @@
 import React from 'react';
-import logo from './logo.svg';
+import useFetch from 'use-http';
 import './App.css';
+import { TableView } from './views/TableView';
+import { IExchange } from './types';
 
 function App() {
+  const { loading, error, data = [] } = useFetch('https://api.coingecko.com/api/v3/exchanges', {}, [])
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        List of exchanges
       </header>
+      <body>
+        <h1>{loading}</h1>
+        {
+          !(loading && error) && <TableView exchanges={data} />
+        }
+        <pre>{JSON.stringify(error)}</pre>
+      </body>
     </div>
   );
 }
