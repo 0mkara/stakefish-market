@@ -1,28 +1,23 @@
 import React, { ReactElement } from 'react';
 import {
   useTable,
-  useColumnOrder,
-  useSortBy,
   usePagination,
   useFlexLayout,
-  useResizeColumns,
   useRowSelect,
-  CellProps,
+  CellProps
 } from 'react-table';
 import { Table } from 'react-bootstrap';
 import { Link } from "wouter";
 
+import { TablePagination } from '../components/tablePagination';
 import { IExchange } from '../types';
 
 interface IProps {
   exchanges: Array<IExchange>;
 }
 const hooks = [
-  useColumnOrder,
-  useSortBy,
   usePagination,
   useFlexLayout,
-  useResizeColumns,
   useRowSelect
 ]
 
@@ -75,38 +70,40 @@ export function TableView({ exchanges }: IProps): ReactElement {
     ],
   }
 ], []);
-  const instance = useTable(
+  const instance = useTable<IExchange>(
     {
       columns,
-      data: exchanges
+      data: exchanges,
     },
     ...hooks
   )
-  const { getTableProps, headerGroups, getTableBodyProps, prepareRow, rows } = instance
-  
+  const { getTableProps, headerGroups, getTableBodyProps, prepareRow, page } = instance;
   return (
-    <Table {...getTableProps()} bordered>
-      <thead>
-        {headerGroups.map(headerGroup => (
-          <tr {...headerGroup.getHeaderGroupProps()}>
-            {headerGroup.headers.map(column => (
-              <th {...column.getHeaderProps()}>{column.render('Header')}</th>
-            ))}
-          </tr>
-        ))}
-      </thead>
-      <tbody {...getTableBodyProps()}>
-        {rows.map((row, i) => {
-          prepareRow(row)
-          return (
-            <tr {...row.getRowProps()}>
-              {row.cells.map(cell => {
-                return <td {...cell.getCellProps()} className="overflow-auto">{cell.render('Cell')}</td>
-              })}
+    <>
+      <Table {...getTableProps()} bordered>
+        <thead>
+          {headerGroups.map(headerGroup => (
+            <tr {...headerGroup.getHeaderGroupProps()}>
+              {headerGroup.headers.map(column => (
+                <th {...column.getHeaderProps()}>{column.render('Header')}</th>
+              ))}
             </tr>
-          )
-        })}
-      </tbody>
-    </Table>
+          ))}
+        </thead>
+        <tbody {...getTableBodyProps()}>
+          {page.map((row, i) => {
+            prepareRow(row)
+            return (
+              <tr {...row.getRowProps()}>
+                {row.cells.map(cell => {
+                  return <td {...cell.getCellProps()} className="overflow-auto">{cell.render('Cell')}</td>
+                })}
+              </tr>
+            )
+          })}
+        </tbody>
+      </Table>
+      <TablePagination instance={instance} />
+    </>
   )
 }
