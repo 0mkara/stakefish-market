@@ -7,9 +7,11 @@ import {
   useFlexLayout,
   useResizeColumns,
   useRowSelect,
-  CellProps
+  CellProps,
 } from 'react-table';
 import { Table } from 'react-bootstrap';
+import { Link } from "wouter";
+
 import { IExchange } from '../types';
 
 interface IProps {
@@ -43,7 +45,10 @@ export function TableView({ exchanges }: IProps): ReactElement {
       },
       {
         Header: 'Name',
-        accessor: 'name',
+        accessor: (row: IExchange) => row,
+        Cell: ({cell: { value }}: CellProps<IExchange>) => (
+          <Link href={`/exchange/${value.id}`}>{value.name}</Link>
+        )
       },
       {
         Header: 'Country',
