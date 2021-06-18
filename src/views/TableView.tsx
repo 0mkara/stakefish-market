@@ -35,10 +35,16 @@ export function TableView({ exchanges }: IProps): ReactElement {
       {
         Header: 'Rank',
         accessor: 'trust_score_rank',
+        minWidth: 60,
+        width: 60,
+        maxWidth: 60,
       },
       {
         Header: 'Logo',
         accessor: 'image',
+        minWidth: 80,
+        width: 80,
+        maxWidth: 80,
         Cell: ({cell: { value }}: CellProps<IExchange>) => (
           <img src={value} alt="" />
         )
@@ -46,6 +52,9 @@ export function TableView({ exchanges }: IProps): ReactElement {
       {
         Header: 'Name',
         accessor: (row: IExchange) => row,
+        minWidth: 100,
+        width: 140,
+        maxWidth: 140,
         Cell: ({cell: { value }}: CellProps<IExchange>) => (
           <Link href={`/exchange/${value.id}`}>{value.name}</Link>
         )
@@ -53,6 +62,8 @@ export function TableView({ exchanges }: IProps): ReactElement {
       {
         Header: 'Country',
         accessor: 'country',
+        width: 100,
+        maxWidth: 100,
       },
       {
         Header: 'URL',
